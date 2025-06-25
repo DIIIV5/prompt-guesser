@@ -1,0 +1,23 @@
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* These styles will override any default styles that might interfere with PromptGuesser theme */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  background-color: #0a0a0a;
+  overflow-x: hidden;
+}
+
+/* Override any default button styles */
+button {
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 0 !important;
+}
