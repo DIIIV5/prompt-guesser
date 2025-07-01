@@ -243,12 +243,12 @@ export const getTemperaturePromptResponses = (promptID: string) => {
   };
 };
 
-const shufflePrompts = (prompts: PromptProps[]) => {
+export const shufflePrompts = (prompts: PromptProps[]) => {
   const shuffledPrompts = [...prompts].sort(() => Math.random() - 0.5);
   return shuffledPrompts;
 }
 
-const shuffleResponses = (responses: ResponseProps[]) => {
+export const shuffleResponses = (responses: ResponseProps[]) => {
   const shuffledResponses = [...responses].sort(() => Math.random() - 0.5);
   return shuffledResponses;
 }

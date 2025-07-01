@@ -1,18 +1,26 @@
 import { useState, useEffect } from 'react';
 import type { PromptResponseProps } from '../types/promptTypes';
-import getPromptsResponses, { getTemperaturePromptResponses } from '../hooks/promptAPI';
+import getPromptsResponses, { getTemperaturePromptResponses, shufflePromptsAndResponses, shuffleResponses } from '../hooks/promptAPI';
 import { usePromptGame } from '../hooks/usePromptGame';
 import { GameHeader } from './GameHeader';
 import { GameGrid } from './GameGrid';
 import './PromptGuesser.css';
-import PromptView from './PromptView';
+import BasePromptView from './PromptView';
+import { type GameType } from '../types/gameTypes';
 
 interface GameViewProps {
   gameState: ReturnType<typeof usePromptGame>;
   onReset: () => void;
 }
 
-type GameType = 'prompt' | 'temperature';
+const GameTypeButtons: React.FC<{ setGameType: (gameType: GameType) => void }> = ({ setGameType }) => {
+  return (
+    <div className="game-type-buttons">
+      <button className="game-type-btn" onClick={() => setGameType('prompt')}>Prompt</button>
+      <button className="game-type-btn" onClick={() => setGameType('temperature')}>Temperature</button>
+    </div>
+  );
+};
 
 const GameView: React.FC<GameViewProps> = ({ gameState, onReset }) => {
   // Clear incorrect match indicator after animation
@@ -56,21 +64,70 @@ const GameView: React.FC<GameViewProps> = ({ gameState, onReset }) => {
 const PromptGuesser: React.FC = () => {
   const [promptsAndResponses, setPromptsAndResponses] = useState<PromptResponseProps>(getPromptsResponses());
   const [showGame, setShowGame] = useState(false);
-  const gameState = usePromptGame(promptsAndResponses);
+  const [pendingGameStart, setPendingGameStart] = useState(false);
+  const [gameState, setGameState] = useState(usePromptGame(promptsAndResponses));
   const [gameType, setGameType] = useState<GameType>('prompt');
+  const [selectedPrompt, setSelectedPrompt] = useState<string>('');
+  const [customPrompt, setCustomPrompt] = useState<string>('');
+
+  // Initialize selectedPrompt with the first prompt
+  useEffect(() => {
+    if (promptsAndResponses.prompts.length > 0 && !selectedPrompt) {
+      setSelectedPrompt(promptsAndResponses.prompts[0].prompt);
+    }
+  }, [promptsAndResponses.prompts, selectedPrompt]);
+
+  // Show game after data has been updated
+  useEffect(() => {
+    if (pendingGameStart) {
+      let shuffled = promptsAndResponses;
+      if (gameType === 'temperature') {
+        shuffled = {
+          prompts: promptsAndResponses.prompts,
+          responses: shuffleResponses(promptsAndResponses.responses)
+        }
+      } else {
+        shuffled = shufflePromptsAndResponses(promptsAndResponses);
+      }
+      const newGameState = {
+        shuffledData: shuffled,
+        selectedPrompt: null,
+        selectedResponse: null,
+        matches: {},
+        score: 0,
+        gameComplete: false,
+        incorrectMatches: { promptId: null, responseId: null },
+        resetGame: gameState.resetGame,
+        selectPrompt: gameState.selectPrompt,
+        selectResponse: gameState.selectResponse,
+        clearIncorrectMatch: gameState.clearIncorrectMatch
+      };
+      setGameState(newGameState);
+      setShowGame(true);
+      setPendingGameStart(false);
+    }
+  }, [pendingGameStart, promptsAndResponses, gameState, gameType]);
 
   const handleStartGame = () => {
+    console.log('handleStartGame', gameType);
     if (gameType === 'temperature') {
-      setPromptsAndResponses(getTemperaturePromptResponses(promptsAndResponses.prompts[0].id));
+
+      const prompt = promptsAndResponses.prompts.find((prompt) => prompt.prompt === selectedPrompt);
+      if (prompt) {
+        setPromptsAndResponses(getTemperaturePromptResponses(prompt.id));
+      } else {
+        setPromptsAndResponses(getTemperaturePromptResponses(promptsAndResponses.prompts[0].id));
+      }
     }
     if (gameType === 'prompt') {
       setPromptsAndResponses(getPromptsResponses());
     }
-    gameState.resetGame();
-    setShowGame(true);
+    setPendingGameStart(true);
   };
 
   const handleReset = () => {
+    setPromptsAndResponses(getPromptsResponses());
+    setGameType('prompt');
     setShowGame(false);
   };
 
@@ -89,14 +146,19 @@ const PromptGuesser: React.FC = () => {
             <p className="prompt-guesser-subtitle">Match AI Temperatures with Their Responses</p>
           </>
         )}
-        <div className="game-type-buttons">
-          <button className="game-type-btn" onClick={() => setGameType('prompt')}>Prompt</button>
-          <button className="game-type-btn" onClick={() => setGameType('temperature')}>Temperature</button>
-        </div>
+        <GameTypeButtons setGameType={setGameType} />
       </div>
 
       {!showGame ? (
-        <PromptView prompts={promptsAndResponses.prompts} onStartGame={handleStartGame} />
+        <BasePromptView 
+          prompts={promptsAndResponses.prompts} 
+          onStartGame={handleStartGame} 
+          gameType={gameType} 
+          onSelectPrompt={setSelectedPrompt}
+          selectedPrompt={selectedPrompt}
+          customPrompt={customPrompt}
+          onCustomPromptChange={setCustomPrompt}
+        />
       ) : (
         <GameView gameState={gameState} onReset={handleReset} />
       )}
