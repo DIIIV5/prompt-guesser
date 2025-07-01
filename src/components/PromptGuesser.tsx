@@ -1,38 +1,18 @@
 import { useState, useEffect } from 'react';
 import type { PromptResponseProps } from '../types/promptTypes';
-import getPromptsResponses from '../hooks/promptAPI';
+import getPromptsResponses, { getTemperaturePromptResponses } from '../hooks/promptAPI';
 import { usePromptGame } from '../hooks/usePromptGame';
 import { GameHeader } from './GameHeader';
 import { GameGrid } from './GameGrid';
 import './PromptGuesser.css';
-
-interface PromptViewProps {
-  prompts: PromptResponseProps['prompts'];
-  onStartGame: () => void;
-}
-
-const PromptView: React.FC<PromptViewProps> = ({ prompts, onStartGame }) => {
-  return (
-    <div className="prompts-only-view">
-      <div className="prompts-list">
-        <h2 className="section-title">Available Prompts</h2>
-        {prompts.map((prompt) => (
-          <div key={prompt.id} className="prompt-item">
-            <p className="prompt-text">{prompt.prompt}</p>
-          </div>
-        ))}
-      </div>
-      <button className="send-prompts-btn" onClick={onStartGame}>
-        Send Prompts
-      </button>
-    </div>
-  );
-};
+import PromptView from './PromptView';
 
 interface GameViewProps {
   gameState: ReturnType<typeof usePromptGame>;
   onReset: () => void;
 }
+
+type GameType = 'prompt' | 'temperature';
 
 const GameView: React.FC<GameViewProps> = ({ gameState, onReset }) => {
   // Clear incorrect match indicator after animation
@@ -74,11 +54,18 @@ const GameView: React.FC<GameViewProps> = ({ gameState, onReset }) => {
 };
 
 const PromptGuesser: React.FC = () => {
-  const [promptsAndResponses] = useState<PromptResponseProps>(getPromptsResponses());
+  const [promptsAndResponses, setPromptsAndResponses] = useState<PromptResponseProps>(getPromptsResponses());
   const [showGame, setShowGame] = useState(false);
   const gameState = usePromptGame(promptsAndResponses);
+  const [gameType, setGameType] = useState<GameType>('prompt');
 
   const handleStartGame = () => {
+    if (gameType === 'temperature') {
+      setPromptsAndResponses(getTemperaturePromptResponses(promptsAndResponses.prompts[0].id));
+    }
+    if (gameType === 'prompt') {
+      setPromptsAndResponses(getPromptsResponses());
+    }
     gameState.resetGame();
     setShowGame(true);
   };
@@ -90,8 +77,22 @@ const PromptGuesser: React.FC = () => {
   return (
     <div className="prompt-guesser-container">
       <div className="prompt-guesser-header">
-        <h1 className="prompt-guesser-title">Prompt Matcher</h1>
-        <p className="prompt-guesser-subtitle">Match AI Prompts with Their Responses</p>
+        {gameType === 'prompt' && (
+          <>
+            <h1 className="prompt-guesser-title">Prompt Guesser</h1>
+            <p className="prompt-guesser-subtitle">Match AI Prompts with Their Responses</p>
+          </>
+        )}
+        {gameType === 'temperature' && (
+          <>
+            <h1 className="prompt-guesser-title">Temperature Guesser</h1>
+            <p className="prompt-guesser-subtitle">Match AI Temperatures with Their Responses</p>
+          </>
+        )}
+        <div className="game-type-buttons">
+          <button className="game-type-btn" onClick={() => setGameType('prompt')}>Prompt</button>
+          <button className="game-type-btn" onClick={() => setGameType('temperature')}>Temperature</button>
+        </div>
       </div>
 
       {!showGame ? (

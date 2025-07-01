@@ -14,6 +14,33 @@
   --border-harsh: #333333;
 }
 
+/* Game Type Buttons and container */
+.game-type-btn {
+  background: var(--darker-bg);
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  color: var(--neon-purple);
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-shadow: none;
+}
+
+.game-type-btn:hover {
+  background: var(--darker-bg);
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  color: var(--neon-purple);
+}
+
+.game-type-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
 .prompt-guesser-container {
   background: linear-gradient(135deg, var(--dark-bg) 0%, var(--darker-bg) 100%);
   min-height: 100vh;

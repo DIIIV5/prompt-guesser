@@ -25,7 +25,7 @@ export const ResponseCard: React.FC<ResponseCardProps> = ({
 
   return (
     <div className={cardClasses} onClick={onClick}>
-      <p className="response-text">{response.prompt}</p>
+      <p className="response-text">{response.response}</p>
       {isMatched && (
         <div className="match-indicator">✓ Matched</div>
       )}
