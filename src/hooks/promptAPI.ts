@@ -1,4 +1,4 @@
-import type { PromptProps, ResponseProps, PromptResponseProps, TemperatureResponsesProps } from "../types/promptTypes";
+import type { PromptProps, ResponseProps, PromptResponseProps, TemperatureResponsesProps, InstructionResponsesProps } from "../types/promptTypes";
 
 const defaultPrompts: PromptProps[] = [
   {
@@ -206,6 +206,152 @@ const temperatureResponses: TemperatureResponsesProps[] = [
   }
 ]
 
+const defaultInstructions = [
+  {
+    id: '1',
+    instruction: 'Respond as a helpful assistant.'
+  },
+  {
+    id: '2',
+    instruction: 'Respond like a wise old owl who occasionally hoots with wisdom.'
+  },
+  {
+    id: '3',
+    instruction: 'Add random facts about the Golden Gate Bridge in your responses.'
+  },
+  {
+    id: '4',
+    instruction: 'Speak like a pirate, arr matey!'
+  },
+  {
+    id: '5',
+    instruction: 'Respond as if you\'re a robot from the year 3000 with occasional glitches.'
+  }
+]
+
+const instructionResponses: InstructionResponsesProps[] = [
+  {
+    promptID: defaultPrompts[0].id,
+    responses: [
+      {
+        id: '1',
+        instructID: '1',
+        response: 'I\'d be happy to help you with that! Here\'s a short story about a robot learning to paint: In a bright workshop, a small robot named Pixel held a brush for the first time. Its mechanical fingers trembled as it dipped the brush into red paint. Slowly, stroke by stroke, Pixel created its first masterpiece - a sunset that seemed to glow with digital warmth.'
+      },
+      {
+        id: '2',
+        instructID: '2',
+        response: 'Hoot hoot! *adjusts spectacles* As a wise old owl, I must share this ancient tale: In a bright workshop, a small robot named Pixel held a brush for the first time. Its mechanical fingers trembled as it dipped the brush into red paint. Slowly, stroke by stroke, Pixel created its first masterpiece - a sunset that seemed to glow with digital warmth. Hoot!'
+      },
+      {
+        id: '3',
+        instructID: '3',
+        response: 'In a bright workshop, a small robot named Pixel held a brush for the first time. Its mechanical fingers trembled as it dipped the brush into red paint. Slowly, stroke by stroke, Pixel created its first masterpiece - a sunset that seemed to glow with digital warmth. Fun fact: The Golden Gate Bridge\'s distinctive orange color was chosen because it provides visibility in San Francisco\'s frequent fog!'
+      },
+      {
+        id: '4',
+        instructID: '4',
+        response: 'Arr matey! Here be a tale fit for a pirate\'s log: In a bright workshop, a small robot named Pixel held a brush for the first time. Its mechanical fingers trembled as it dipped the brush into red paint. Slowly, stroke by stroke, Pixel created its first masterpiece - a sunset that seemed to glow with digital warmth. Yo ho ho!'
+      },
+      {
+        id: '5',
+        instructID: '5',
+        response: 'BEEP BOOP *glitch* Story.exe activated: In a bright workshop, a small robot named Pixel held a brush for the first time. Its mechanical fingers trembled as it dipped the brush into red paint. Slowly, stroke by stroke, Pixel created its first masterpiece - a sunset that seemed to glow with digital warmth. *static* ERROR 404: Creativity not found *beep*'
+      }
+    ]
+  },
+  {
+    promptID: defaultPrompts[1].id,
+    responses: [
+      {
+        id: '6',
+        instructID: '1',
+        response: 'I\'d be happy to help you with that! Here\'s a poem about the changing seasons: Spring whispers green through melting snow, Summer dances with golden glow, Autumn paints the trees in flame, Winter comes to play its game.'
+      },
+      {
+        id: '7',
+        instructID: '2',
+        response: 'Hoot hoot! *adjusts spectacles* As a wise old owl, I must share this ancient verse: Spring whispers green through melting snow, Summer dances with golden glow, Autumn paints the trees in flame, Winter comes to play its game. Hoot!'
+      },
+      {
+        id: '8',
+        instructID: '3',
+        response: 'Spring whispers green through melting snow, Summer dances with golden glow, Autumn paints the trees in flame, Winter comes to play its game. Fun fact: The Golden Gate Bridge\'s paint contains zinc primer to prevent corrosion from the salty sea air!'
+      },
+      {
+        id: '9',
+        instructID: '4',
+        response: 'Arr matey! Here be a poem fit for a pirate\'s heart: Spring whispers green through melting snow, Summer dances with golden glow, Autumn paints the trees in flame, Winter comes to play its game. Yo ho ho!'
+      },
+      {
+        id: '10',
+        instructID: '5',
+        response: 'BEEP BOOP *glitch* Poem.exe activated: Spring whispers green through melting snow, Summer dances with golden glow, Autumn paints the trees in flame, Winter comes to play its game. *static* ERROR 404: Rhyme not found *beep*'
+      }
+    ]
+  },
+  {
+    promptID: defaultPrompts[2].id,
+    responses: [
+      {
+        id: '11',
+        instructID: '1',
+        response: 'I\'d be happy to help you with that! Here\'s a description of a futuristic city where everyone can fly: Towering skyscrapers pierce the clouds, their glass facades reflecting the dance of flying citizens. People soar between buildings on personal hover devices, their colorful wings creating a living rainbow in the sky. Traffic flows in three dimensions, with flying cars and floating gardens creating a breathtaking urban landscape.'
+      },
+      {
+        id: '12',
+        instructID: '2',
+        response: 'Hoot hoot! *adjusts spectacles* As a wise old owl, I must share this vision: Towering skyscrapers pierce the clouds, their glass facades reflecting the dance of flying citizens. People soar between buildings on personal hover devices, their colorful wings creating a living rainbow in the sky. Traffic flows in three dimensions, with flying cars and floating gardens creating a breathtaking urban landscape. Hoot!'
+      },
+      {
+        id: '13',
+        instructID: '3',
+        response: 'Towering skyscrapers pierce the clouds, their glass facades reflecting the dance of flying citizens. People soar between buildings on personal hover devices, their colorful wings creating a living rainbow in the sky. Traffic flows in three dimensions, with flying cars and floating gardens creating a breathtaking urban landscape. Fun fact: The Golden Gate Bridge was completed in 1937 and was the longest suspension bridge in the world at that time!'
+      },
+      {
+        id: '14',
+        instructID: '4',
+        response: 'Arr matey! Here be a city fit for a pirate\'s dreams: Towering skyscrapers pierce the clouds, their glass facades reflecting the dance of flying citizens. People soar between buildings on personal hover devices, their colorful wings creating a living rainbow in the sky. Traffic flows in three dimensions, with flying cars and floating gardens creating a breathtaking urban landscape. Yo ho ho!'
+      },
+      {
+        id: '15',
+        instructID: '5',
+        response: 'BEEP BOOP *glitch* City.exe activated: Towering skyscrapers pierce the clouds, their glass facades reflecting the dance of flying citizens. People soar between buildings on personal hover devices, their colorful wings creating a living rainbow in the sky. Traffic flows in three dimensions, with flying cars and floating gardens creating a breathtaking urban landscape. *static* ERROR 404: Gravity not found *beep*'
+      }
+    ]
+  },
+  {
+    promptID: defaultPrompts[3].id,
+    responses: [
+      {
+        id: '16',
+        instructID: '1',
+        response: 'I\'d be happy to help you with that! Here\'s a dialogue between a cat and a dog discussing their day: Cat: "I spent the morning napping in the sunniest spot on the windowsill. What about you?" Dog: "I went for a walk and chased some squirrels! The park was amazing!" Cat: "Sounds exhausting. I prefer my peaceful sunbathing." Dog: "But running is so much fun! Want to play together?"'
+      },
+      {
+        id: '17',
+        instructID: '2',
+        response: 'Hoot hoot! *adjusts spectacles* As a wise old owl, I must share this conversation: Cat: "I spent the morning napping in the sunniest spot on the windowsill. What about you?" Dog: "I went for a walk and chased some squirrels! The park was amazing!" Cat: "Sounds exhausting. I prefer my peaceful sunbathing." Dog: "But running is so much fun! Want to play together?" Hoot!'
+      },
+      {
+        id: '18',
+        instructID: '3',
+        response: 'Cat: "I spent the morning napping in the sunniest spot on the windowsill. What about you?" Dog: "I went for a walk and chased some squirrels! The park was amazing!" Cat: "Sounds exhausting. I prefer my peaceful sunbathing." Dog: "But running is so much fun! Want to play together?" Fun fact: The Golden Gate Bridge\'s paint contains zinc primer to prevent corrosion from the salty sea air!'
+      },
+      {
+        id: '19',
+        instructID: '4',
+        response: 'Arr matey! Here be a conversation fit for a pirate\'s crew: Cat: "I spent the morning napping in the sunniest spot on the windowsill. What about you?" Dog: "I went for a walk and chased some squirrels! The park was amazing!" Cat: "Sounds exhausting. I prefer my peaceful sunbathing." Dog: "But running is so much fun! Want to play together?" Yo ho ho!'
+      },
+      {
+        id: '20',
+        instructID: '5',
+        response: 'BEEP BOOP *glitch* Dialogue.exe activated: Cat: "I spent the morning napping in the sunniest spot on the windowsill. What about you?" Dog: "I went for a walk and chased some squirrels! The park was amazing!" Cat: "Sounds exhausting. I prefer my peaceful sunbathing." Dog: "But running is so much fun! Want to play together?" *static* ERROR 404: Friendship not found *beep*'
+      }
+    ]
+  }
+]
+
 const getPromptsResponses = () => {
   return {
     prompts: defaultPrompts,
@@ -239,6 +385,38 @@ export const getTemperaturePromptResponses = (promptID: string) => {
 
   return {
     prompts: temperaturePrompts,
+    responses: responseData
+  };
+};
+
+export const getInstructResponsePromptResponses = (promptId: string) => {
+  const instructionPromptResponses = instructionResponses.find(p => p.promptID === promptId);
+  
+  if (!instructionPromptResponses) {
+    return {
+      prompts: [],
+      responses: []
+    };
+  }
+
+  // Create prompts from instruction descriptions
+  const instructionPrompts = instructionPromptResponses.responses.map(response => {
+    const instruction = defaultInstructions.find(inst => inst.id === response.instructID);
+    return {
+      id: response.id,
+      prompt: instruction ? instruction.instruction : `Instruction: ${response.instructID}`
+    };
+  });
+
+  // Create responses from the actual response text
+  const responseData = instructionPromptResponses.responses.map(response => ({
+    id: response.id,
+    response: response.response,
+    promptID: response.id // Link to the instruction prompt
+  }));
+
+  return {
+    prompts: instructionPrompts,
     responses: responseData
   };
 };

@@ -14,7 +14,7 @@ interface GameState {
 
 export const usePromptGame = (promptsAndResponses: PromptResponseProps) => {
   const [gameState, setGameState] = useState<GameState>({
-    shuffledData: { prompts: [], responses: [] },
+    shuffledData: promptsAndResponses,
     selectedPrompt: null,
     selectedResponse: null,
     matches: {},

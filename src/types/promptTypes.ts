@@ -18,3 +18,8 @@ export interface TemperatureResponsesProps {
   promptID: string;
   responses: { id: string, temperature: number, response: string }[];
 }
+
+export interface InstructionResponsesProps {
+  promptID: string;
+  responses: { id: string, instructID: string, response: string }[];
+}
