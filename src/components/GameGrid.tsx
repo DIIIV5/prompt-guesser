@@ -2,10 +2,12 @@ import React from 'react';
 import type { PromptProps, ResponseProps } from '../types/promptTypes';
 import { PromptCard } from './PromptCard';
 import { ResponseCard } from './ResponseCard';
+import { type GameType } from '../types/gameTypes';
 
 interface GameGridProps {
   prompts: PromptProps[];
   responses: ResponseProps[];
+  gameType: GameType;
   selectedPrompt: string | null;
   selectedResponse: string | null;
   matches: Record<string, string>;
@@ -17,6 +19,7 @@ interface GameGridProps {
 export const GameGrid: React.FC<GameGridProps> = ({
   prompts,
   responses,
+  gameType,
   selectedPrompt,
   selectedResponse,
   matches,
@@ -27,7 +30,9 @@ export const GameGrid: React.FC<GameGridProps> = ({
   return (
     <div className="game-grid">
       <div className="prompts-column">
-        <h2 className="column-title">Prompts</h2>
+        <h2 className="column-title">
+          {gameType === 'prompt' ? 'Response' : gameType === 'temperature' ? 'Temperature' : 'Instruction'}
+        </h2>
         {prompts.map((prompt) => (
           <PromptCard
             key={prompt.id}

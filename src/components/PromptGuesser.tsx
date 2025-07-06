@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { PromptResponseProps } from '../types/promptTypes';
-import getPromptsResponses, { getTemperaturePromptResponses, shufflePromptsAndResponses, shuffleResponses } from '../hooks/promptAPI';
+import getPromptsResponses, { getTemperaturePromptResponses, getInstructPromptResponses, shufflePromptsAndResponses, shuffleResponses } from '../hooks/promptAPI';
 import { usePromptGame } from '../hooks/usePromptGame';
 import { GameHeader } from './GameHeader';
 import { GameGrid } from './GameGrid';
@@ -10,20 +10,26 @@ import { type GameType } from '../types/gameTypes';
 
 interface GameViewProps {
   gameData: PromptResponseProps;
+  gameType: GameType;
   onReset: () => void;
 }
 
-const GameTypeButtons: React.FC<{ setGameType: (gameType: GameType) => void }> = ({ setGameType }) => {
+const GameTypeButtons: React.FC<{ setGameType: (gameType: GameType) => void, showGame: boolean }> = ({ setGameType, showGame }) => {
   return (
     <div className="game-type-buttons">
-      <button className="game-type-btn" onClick={() => setGameType('prompt')}>Prompt</button>
-      <button className="game-type-btn" onClick={() => setGameType('temperature')}>Temperature</button>
+      {!showGame ? (
+        <div className="game-type-btn-container">
+          <button className="game-type-btn" onClick={() => setGameType('prompt')} disabled={showGame}>Prompt</button>
+          <button className="game-type-btn" onClick={() => setGameType('temperature')} disabled={showGame}>Temperature</button>
+          <button className="game-type-btn" onClick={() => setGameType('instruct')} disabled={showGame}>Instruct</button>
+        </div>
+      ) : null}
     </div>
   );
 };
 
-const GameView: React.FC<GameViewProps> = ({ gameData, onReset }) => {
-  const gameState = usePromptGame(gameData);
+const GameView: React.FC<GameViewProps> = ({ gameData, onReset, gameType }) => {
+  const gameState = usePromptGame(gameData, gameType);
   
   // Clear incorrect match indicator after animation
   useEffect(() => {
@@ -46,6 +52,7 @@ const GameView: React.FC<GameViewProps> = ({ gameData, onReset }) => {
       <GameGrid
         prompts={gameState.shuffledData.prompts}
         responses={gameState.shuffledData.responses}
+        gameType={gameState.gameType}
         selectedPrompt={gameState.selectedPrompt}
         selectedResponse={gameState.selectedResponse}
         matches={gameState.matches}
@@ -79,12 +86,10 @@ const PromptGuesser: React.FC = () => {
     }
   }, [promptsAndResponses.prompts, selectedPrompt]);
 
-
-
   const handleStartGame = () => {
     console.log('handleStartGame', gameType);
     
-    let gameData: PromptResponseProps;
+    let gameData: PromptResponseProps = { prompts: [], responses: [] };
     
     if (gameType === 'temperature') {
       const prompt = promptsAndResponses.prompts.find((prompt) => prompt.prompt === selectedPrompt);
@@ -102,6 +107,16 @@ const PromptGuesser: React.FC = () => {
           responses: shuffleResponses(tempData.responses)
         };
         setPromptsAndResponses(tempData);
+      }
+    } else if (gameType === 'instruct') {
+      const prompt = promptsAndResponses.prompts.find((prompt) => prompt.prompt === selectedPrompt);
+      if (prompt) {
+        const instructData = getInstructPromptResponses(prompt.id);
+        gameData = {
+          prompts: instructData.prompts,
+          responses: shuffleResponses(instructData.responses)
+        };
+        setPromptsAndResponses(instructData);
       }
     } else {
       const newData = getPromptsResponses();
@@ -135,7 +150,13 @@ const PromptGuesser: React.FC = () => {
             <p className="prompt-guesser-subtitle">Match AI Temperatures with Their Responses</p>
           </>
         )}
-        <GameTypeButtons setGameType={setGameType} />
+        {gameType === 'instruct' && (
+          <>
+            <h1 className="prompt-guesser-title">Instruction Guesser</h1>
+            <p className="prompt-guesser-subtitle">Match AI Instructions with Their Responses</p>
+          </>
+        )}
+        <GameTypeButtons setGameType={setGameType} showGame={showGame} />
       </div>
 
       {!showGame ? (
@@ -151,6 +172,7 @@ const PromptGuesser: React.FC = () => {
       ) : (
         <GameView 
           key={gameKey}
+          gameType={gameType}
           gameData={gameData} 
           onReset={handleReset} 
         />

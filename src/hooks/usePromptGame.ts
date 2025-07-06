@@ -1,9 +1,11 @@
 import { useState, useCallback } from 'react';
 import type { PromptResponseProps } from '../types/promptTypes';
 import { shufflePromptsAndResponses } from './promptAPI';
+import { type GameType } from '../types/gameTypes';
 
 interface GameState {
   shuffledData: PromptResponseProps;
+  gameType: GameType,
   selectedPrompt: string | null;
   selectedResponse: string | null;
   matches: Record<string, string>;
@@ -12,9 +14,10 @@ interface GameState {
   incorrectMatches: { promptId: string | null; responseId: string | null };
 }
 
-export const usePromptGame = (promptsAndResponses: PromptResponseProps) => {
+export const usePromptGame = (promptsAndResponses: PromptResponseProps, gameType: GameType) => {
   const [gameState, setGameState] = useState<GameState>({
     shuffledData: promptsAndResponses,
+    gameType: gameType,
     selectedPrompt: null,
     selectedResponse: null,
     matches: {},
@@ -27,6 +30,7 @@ export const usePromptGame = (promptsAndResponses: PromptResponseProps) => {
     const shuffled = shufflePromptsAndResponses(promptsAndResponses);
     setGameState({
       shuffledData: shuffled,
+      gameType: 'prompt',
       selectedPrompt: null,
       selectedResponse: null,
       matches: {},

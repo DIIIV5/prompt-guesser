@@ -389,7 +389,7 @@ export const getTemperaturePromptResponses = (promptID: string) => {
   };
 };
 
-export const getInstructResponsePromptResponses = (promptId: string) => {
+export const getInstructPromptResponses = (promptId: string) => {
   const instructionPromptResponses = instructionResponses.find(p => p.promptID === promptId);
   
   if (!instructionPromptResponses) {
